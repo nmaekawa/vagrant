@@ -9,6 +9,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define "robot" do |robot|
     robot.vm.box = "ubuntu/trusty64"
     robot.vm.network "private_network", ip: "192.168.51.10"
+    robot.vm.hostname = "robot"
 
     robot.vm.provision "ansible" do |ansible|
         ansible.playbook = 'playbooks/robotframework-box.yml'

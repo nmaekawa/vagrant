@@ -10,5 +10,11 @@
     - include: ../roles/packages/tasks/base.yml
     - include: ../roles/user-management/tasks/set-user.yml create_user_name="nmaekawa" create_user_id=2133
     - include: ../roles/user-management/tasks/set-user-env.yml target_username="nmaekawa"
-    - include: ../roles/packages/tasks/install-robotframework.yml python_user="nmaekawa"
+
+    - include: ../roles/packages/tasks/install-robotframework.yml python_user="nmaekawa" virtualenv_name="devo"
+    - include: ../roles/packages/tasks/install-python-devo.yml python_user="nmaekawa" virtualenv_name="devo"
+    - include: ../roles/packages/tasks/install-aws-cli.yml python_user="nmaekawa" virtualenv_name="devo"
+
+
+
 

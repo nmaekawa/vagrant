@@ -1,0 +1,22 @@
+---
+
+    - include: create-virtualenv-dir.yml
+
+    - name: pytest
+      pip: name='pytest' state=present
+        virtualenv='{{ getent_passwd[python_user][4] | default("{{ ansible_env.HOME }}") }}/.virtualenv/{{ virtualenv_name | default("devo") }}'
+
+    - name: httpretty
+      pip: name='httpretty' state=present
+        virtualenv='{{ getent_passwd[python_user][4] | default("{{ ansible_env.HOME }}") }}/.virtualenv/{{ virtualenv_name | default("devo") }}'
+
+    - name: requests
+      pip: name='requests' state=present
+        virtualenv='{{ getent_passwd[python_user][4] | default("{{ ansible_env.HOME }}") }}/.virtualenv/{{ virtualenv_name | default("devo") }}'
+
+    - name: sure
+      pip: name='sure' state=present
+        virtualenv='{{ getent_passwd[python_user][4] | default("{{ ansible_env.HOME }}") }}/.virtualenv/{{ virtualenv_name | default("devo") }}'
+
+
+

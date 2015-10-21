@@ -26,7 +26,8 @@
         state=present
 
     - name: give sudo powers to user
-      lineinfile: "dest=/etc/sudoers state=present regexp='^{{ create_user_name }}' line='{{ create_user_name }}   ALL=(ALL)   NOPASSWD:   ALL' validate='visudo -cf %s'"
+      lineinfile: "dest=/etc/sudoers state=present regexp='^{{ create_user_name }}'
+        line='{{ create_user_name }}   ALL=(ALL)   NOPASSWD:   ALL' validate='visudo -cf %s'"
 
     - name: copy ssh pub to authorized_keys
       authorized_key: user='{{ create_user_name }}' key='https://github.com/{{ create_user_name }}.keys'

@@ -12,6 +12,9 @@
     - name: pip
       apt: name='python-pip' state=present
 
+    - name: virtualenv
+      pip: name='virtualenv' state=present
+
 
 
 

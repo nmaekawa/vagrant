@@ -1,0 +1,24 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  config.vm.define "devo" do |devo|
+    devo.vm.box = "ubuntu/trusty64"
+    devo.vm.network "private_network", ip: "192.168.52.10"
+    devo.vm.hostname = "devo"
+
+    devo.vm.provision "ansible" do |ansible|
+        ansible.playbook = 'playbooks/devo-box.yml'
+    end
+
+    devo.vm.provider 'virtualbox' do |v|
+        v.memory = 4096
+        v.cpus = 1
+    end
+  end
+
+end

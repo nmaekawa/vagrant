@@ -1,0 +1,33 @@
+---
+
+    - include: create-virtualenv-dir.yml
+
+    - name: robotframework
+      pip: name='robotframework' state=present
+        virtualenv='{{ getent_passwd[python_user][4] | default("{{ ansible_env.HOME }}") }}/.virtualenv/{{ virtualenv_name | default("robot") }}'
+
+    - name: Selenium2Library
+      pip: name='robotframework-selenium2library' state=present
+        virtualenv='{{ getent_passwd[python_user][4] | default("{{ ansible_env.HOME }}") }}/.virtualenv/{{ virtualenv_name | default("robot") }}'
+
+    - name: XvfbRobot
+      pip: name='robotframework-xvfb' state=present
+        virtualenv='{{ getent_passwd[python_user][4] | default("{{ ansible_env.HOME }}") }}/.virtualenv/{{ virtualenv_name | default("robot") }}'
+
+    - name: java 1.7 (for selenium)
+      apt: name='{{ item }}' state=present
+      with_items:
+        - openjdk-7-jdk
+        - openjdk-7-jre
+        - openjdk-7-dbg
+        - openjdk-7-doc
+
+    - name: xvfb (headless browser)
+      apt: name='xvfb' state=present
+
+    - name: firefox
+      apt: name='firefox' state=present
+
+
+
+
