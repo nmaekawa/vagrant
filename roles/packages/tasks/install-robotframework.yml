@@ -3,14 +3,17 @@
     - include: create-virtualenv-dir.yml
 
     - name: robotframework
+      become_user: {{ python_user }}
       pip: name='robotframework' state=present
         virtualenv='{{ getent_passwd[python_user][4] | default("{{ ansible_env.HOME }}") }}/.virtualenv/{{ virtualenv_name | default("robot") }}'
 
     - name: Selenium2Library
+      become_user: {{ python_user }}
       pip: name='robotframework-selenium2library' state=present
         virtualenv='{{ getent_passwd[python_user][4] | default("{{ ansible_env.HOME }}") }}/.virtualenv/{{ virtualenv_name | default("robot") }}'
 
     - name: XvfbRobot
+      become_user: {{ python_user }}
       pip: name='robotframework-xvfb' state=present
         virtualenv='{{ getent_passwd[python_user][4] | default("{{ ansible_env.HOME }}") }}/.virtualenv/{{ virtualenv_name | default("robot") }}'
 

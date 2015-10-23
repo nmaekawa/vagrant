@@ -6,7 +6,7 @@
 
     - name: ensure ${HOME}/.virtualenv exists
       file: dest="{{ getent_passwd[python_user][4] | default('{{ ansible_env.HOME }}') }}/{{ virtualenv_dir_name | default('.virtualenv') }}"
-        state=directory
+        state=directory owner="{{ python_user }}" group="{{ python_user }}"
 
 
 
