@@ -4,17 +4,26 @@
 - hosts: all
   remote_user: "{{ r_user | default('vagrant') }}"
   become: yes
+  vars:
+    devo_username: "nmaekawa"
+    devo_userid: 2132
 
-  tasks:
-    - include: ../roles/general-box-setup/tasks/timezone.yml
-    - include: ../roles/packages/tasks/base.yml
-    - include: ../roles/user-management/tasks/set-user.yml create_user_name="nmaekawa" create_user_id=2133
-    - include: ../roles/user-management/tasks/set-user-env.yml target_username="nmaekawa"
+  roles:
+    - role: box-setup
 
-    - include: ../roles/packages/tasks/install-robotframework.yml python_user="nmaekawa" virtualenv_name="devo"
-    - include: ../roles/packages/tasks/install-python-devo.yml python_user="nmaekawa" virtualenv_name="devo"
-    - include: ../roles/packages/tasks/install-aws-cli.yml python_user="nmaekawa" virtualenv_name="devo"
+    - role: user-management
+      set_env_for_username: True
+      username: "{{ devo_username }}"
+      userid: "{{ devo_userid }}"
 
+    - role: python
+      python_user: "{{ devo_username }}"
+
+    - role: robotframework
+      python_user: "{{ devo_username }}"
+
+    - role: znzj.rbenv
+      rbenv_ruby_version: 2.2.3
 
 
 

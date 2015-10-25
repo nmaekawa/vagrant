@@ -6,15 +6,6 @@
     - name: upgrade all packages
       apt: upgrade=dist
 
-    - name: git
+    - name: ensure install git
       apt: name='git-all' state=present
-
-    - name: pip
-      apt: name='python-pip' state=present
-
-    - name: virtualenv
-      pip: name='virtualenv' state=present
-
-
-
 

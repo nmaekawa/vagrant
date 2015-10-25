@@ -5,10 +5,17 @@
   remote_user: "{{ r_user | default('vagrant') }}"
   become: yes
 
-  tasks:
-    - include: ../roles/general-box-setup/tasks/timezone.yml
-    - include: ../roles/packages/tasks/base.yml
-    - include: ../roles/user-management/tasks/set-user.yml create_user_name="nmaekawa" create_user_id=2133
-    - include: ../roles/user-management/tasks/set-user-env.yml target_username="nmaekawa"
-    - include: ../roles/packages/tasks/install-robotframework.yml python_user="nmaekawa"
+  roles:
+    - role: box-setup
+
+    - role: user-management
+      set_env_for_username: True
+      username: "nmaekawa"
+      userid: 2123
+
+    - role: python
+      python_user: "nmaekawa"
+
+    - role: robotframework
+      python_user: "nmaekawa"
 
