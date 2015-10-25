@@ -9,3 +9,5 @@
     - name: ensure install git
       apt: name='git-all' state=present
 
+    - name: ensure install ansible
+      apt: name='ansible' state=present
