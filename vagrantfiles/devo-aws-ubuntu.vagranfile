@@ -1,0 +1,47 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  config.vm.define "aws_devo" do |aws_devo|
+    aws_devo.vm.box = "aws-dummy"
+
+    aws_devo.vm.provision "ansible" do |ansible|
+        ansible.playbook = 'playbooks/devo-box.yml'
+        ansible.extra_vars = {
+            r_user: 'ubuntu'
+        }
+    end
+
+    aws_devo.vm.provider 'aws' do |v, override|
+        v.access_key_id = ENV['AWS_ACCESS_KEY']
+        v.secret_access_key = ENV['AWS_SECRET_KEY']
+        v.keypair_name = 'naomi-kp1'
+
+        v.ami = 'ami-d05e75b8'
+        v.availability_zone = 'us-east-1b'
+        v.region = 'us-east-1'
+        v.instance_type = 't2.micro'
+        v.subnet_id = 'subnet-3c6dc44b'
+        v.associate_public_ip = true
+        v.security_groups = [ 'sg-25601041' ]
+        v.block_device_mapping = [{ 'DeviceName' => '/dev/xvda', 'Ebs.VolumeSize' => 50 }]
+        v.tags = {
+            'Name' => 'naomi-vagrant-test',
+            'ENV' => 'DEV',
+            'Unit' => 'DE',
+            'Project' => 'MH',
+            'Owner' => 'dev',
+            'Role' => 'all_in_one',
+            'ClusteID' => 'naomi'
+        }
+
+        override.ssh.username = 'ubuntu'
+        override.ssh.private_key_path = '~/.ssh/naomi-kp1.pem'
+    end
+  end
+
+end
