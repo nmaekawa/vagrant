@@ -1,0 +1,67 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+    config.vm.provider 'aws' do |v, override|
+        v.access_key_id = ENV['AWS_ACCESS_KEY']
+        v.secret_access_key = ENV['AWS_SECRET_KEY']
+        v.keypair_name = 'naomi-kp1'
+
+        #v.ami = 'ami-2644044c' # custom amazon-linux ami: with no requiretty in sudoers
+        v.ami = 'ami-60b6c60a'
+        v.availability_zone = 'us-east-1b'
+        v.region = 'us-east-1'
+        v.instance_type = 't2.micro'
+        v.subnet_id = 'subnet-3c6dc44b'
+        v.associate_public_ip = true
+        v.security_groups = [ 'sg-25601041' ]
+        v.block_device_mapping = [{ 'DeviceName' => '/dev/xvda', 'Ebs.VolumeSize' => 10 }]
+
+        v.user_data = File.read("scripts/user-data.sh")
+
+        override.ssh.username = 'ec2-user'
+        override.ssh.private_key_path = '~/.ssh/naomi-kp1.pem'
+    end
+
+    (1..3).each do |i|
+        config.vm.define "server#{i}" do |server|
+            server.vm.box = "aws-dummy"
+            server.vm.hostname = "server#{i}"
+
+            server.vm.provider 'aws' do |v|
+                v.tags = {
+                    'Name' => server.vm.hostname,
+                    'ENV' => 'DEV',
+                    'Unit' => 'DE',
+                    'Project' => 'MH',
+                    'Owner' => 'nmaekawa',
+                    'Role' => 'consul_server',
+                    'ClusteID' => 'naomi-datacenter2'
+                }
+           end
+        end
+    end
+
+    (1..1).each do |i|
+        config.vm.define "agent#{i}" do |server|
+            server.vm.box = "aws-dummy"
+            server.vm.hostname = "agent#{i}"
+
+            server.vm.provider 'aws' do |v|
+                v.tags = {
+                    'Name' => server.vm.hostname,
+                    'ENV' => 'DEV',
+                    'Unit' => 'DE',
+                    'Project' => 'MH',
+                    'Owner' => 'nmaekawa',
+                    'Role' => 'consul_agent',
+                    'ClusteID' => 'naomi-datacenter2'
+                }
+           end
+        end
+    end
+end
