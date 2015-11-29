@@ -1,0 +1,9 @@
+{
+    "bootstrap": true,
+    "server": true,
+    "datacenter": "naomi-datacenter",
+    "data_dir": "/var/consul",
+    "encrypt": "oH1J9K/kQobJFXDZrO4mHQ==",
+    "log_level": "INFO",
+    "enable_syslog": true
+}

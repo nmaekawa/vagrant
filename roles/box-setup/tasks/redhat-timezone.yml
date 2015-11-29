@@ -1,0 +1,23 @@
+---
+
+    - name: remove current localtime file
+      file: path=/etc/localtime state=absent
+      ignore_errors: yes
+
+    - name: copy New_York as localtime
+      command: "cp -p /usr/share/zoneinfo/America/New_York /etc/localtime"
+      ignore_errors: yes
+
+    - name: update zone in /etc/sysconfig/clock
+      lineinfile: dest=/etc/sysconfig/clock
+        regexp='^ZONE='
+        line='ZONE="America/New_York"'
+        state=present
+
+    - name: disable UTC in /etc/sysconfig/clock
+      lineinfile: dest=/etc/sysconfig/clock
+        regexp='^UTC='
+        line='UTC=no'
+        state/present
+
+

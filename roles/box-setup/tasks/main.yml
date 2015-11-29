@@ -1,3 +1,23 @@
 ---
-    - include: timezone.yml
-    - include: packages.yml
+    - include: debian-timezone.yml
+      when: ansible_os_family == "Debian"
+
+    - include: redhat-timezone.yml
+      when: ansible_os_family == "RedHat"
+
+    - include: apt-update.yml
+      when: ansible_os_family == "Debian"
+
+    - include: yum-update.yml
+      when: ansible_os_family == "RedHat"
+
+    - include: apt-packages.yml
+      when: ansible_os_family == "Debian"
+
+    - include: yum-packages.yml
+      when: ansible_os_family == "RedHat"
+
+
+
+
+

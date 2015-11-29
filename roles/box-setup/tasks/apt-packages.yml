@@ -1,11 +1,5 @@
 ---
 
-    - name: update apt cache
-      apt: update_cache=Yes
-
-    - name: upgrade all packages
-      apt: upgrade=dist
-
     - name: ensure install git
       apt: name='git-all' state=present
 

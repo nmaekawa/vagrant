@@ -1,16 +1,26 @@
 ---
 
-    - name: update apt cache
-      apt: update_cache=Yes
+    - include: ../../box-setup/tasks/apt-update.yml
+      when: ansible_os_family == 'Debian'
 
-    - name: upgrade all packages
-      apt: upgrade=dist
+    - include: ../../box-setup/tasks/yum-update.yml
+      when: ansible_os_family == 'RedHat'
 
     - name: ensure install git
       apt: name='git-all' state=present
+      when: ansible_os_family == 'Debian'
+
+    - name: ensure install git
+      yum: name='git-all' state=present
+      when: ansible_os_family == 'RedHat'
 
     - name: ensure install pip
       apt: name='python-pip' state=present
+      when: ansible_os_family == 'Debian'
+
+    - name: ensure install pip
+      yum: name='python-pip' state=present
+      when: ansible_os_family == 'RedHat'
 
     - name: ensure install virtualenv
       pip: name='virtualenv' state=present

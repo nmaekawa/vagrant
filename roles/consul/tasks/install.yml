@@ -1,0 +1,38 @@
+---
+
+    - name: download consul executable
+      get_url: url="https://dl.bintray.com/mitchellh/consul/0.5.2_linux_amd64.zip"
+        dest=/tmp/consul.zip mode=0754
+
+    - name: unzip consul executable
+      shell: 'cd /tmp && unzip consul.zip'
+
+    - name: create group 'consul'
+      group: name='consul' gid=2124 state=present
+
+    - name: create user 'consul'
+      user: name='consul' uid=2124 group=consul
+        shell=/sbin/nologin createhome=no state=present
+
+    - name: cp consul executable to /usr/local/bin
+      copy: src=/tmp/consul dest=/usr/local/bin/consul
+        owner=consul group=consul mode=0754
+
+    - name: removed consul executable from /tmp
+      file: path=/tmp/consul state=absent
+
+    - name: create /etc/consul.d directory
+      file: path=/etc/consul.d state=directory
+        owner=consul group=consul mode=0754
+
+    - name: create /etc/consul.d subdirectories
+      become_user: consul
+      shell: "mkdir -p /etc/consul.d/{bootstrap,server,client}"
+
+    - name: create consul data dir
+      file: path=/var/consul state=directory
+        owner=consul group=consul mode=0755
+
+
+
+

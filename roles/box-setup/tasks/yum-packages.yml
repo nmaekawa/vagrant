@@ -1,0 +1,7 @@
+---
+
+    - name: ensure install git
+      yum: name='git-all' state=present
+
+    - name: ensure install ansible
+      yum: name='ansible' state=present
