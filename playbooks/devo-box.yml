@@ -19,6 +19,9 @@
     - role: python
       python_user: "{{ devo_username }}"
 
+    - role: ansible
+      python_user: "{{ devo_username }}"
+
     - role: robotframework
       python_user: "{{ devo_username }}"
 

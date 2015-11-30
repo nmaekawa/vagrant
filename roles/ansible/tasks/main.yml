@@ -1,0 +1,5 @@
+---
+
+    - name: ensure install ansible
+      pip: name='ansible' state=present
+
