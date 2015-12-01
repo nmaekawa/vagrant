@@ -1,9 +1,9 @@
 {
     "bootstrap": true,
     "server": true,
-    "datacenter": "naomi-datacenter",
+    "datacenter": "{{ consul_datacenter_name }}",
     "data_dir": "/var/consul",
-    "encrypt": "oH1J9K/kQobJFXDZrO4mHQ==",
-    "log_level": "INFO",
+    "encrypt": "{{ consul_encrypt_key }}",
+    "log_level": "{{ consul_log_level }}",
     "enable_syslog": true
 }

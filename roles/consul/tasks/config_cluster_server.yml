@@ -1,0 +1,8 @@
+---
+
+    - name: set node as consul server
+      template: src=server.j2.json dest=/etc/consul.d/consul_server/config.json
+        owner=consul group=consul mode=0664
+
+    - name: config upstart script
+      template: src=startup.j2.conf dest=/etc/init/consul.conf

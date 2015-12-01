@@ -1,9 +1,13 @@
 {
+    "ui_dir": "/home/consul/dist",
     "server": false,
-    "datacenter": "naomi-datacenter",
+    "datacenter": "{{ consul_datacenter_name }}",
     "data_dir": "/var/consul",
-    "encrypt": "oH1J9K/kQobJFXDZrO4mHQ==",
-    "log_level": "INFO",
+    "encrypt": "{{ consul_encrypt_key }}",
+    "log_level": "{{ consul_log_level }}",
     "enable_syslog": true,
-    "start_join": [{{ cluster_server_to_join }}]
+    "start_join": [ {% for s in groups['servers'] %}
+        '{{ hostvars[s]['ansible_eth0']['ipv4']['address'] }}'{% if not loop.last %}, {% endif %}
+        {% endfor %}
+    ]
 }

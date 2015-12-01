@@ -3,3 +3,6 @@
     - name: ensure install git
       apt: name='git-all' state=present
 
+    - name: ensure install unzip
+      apt: name='unzip' state=present
+

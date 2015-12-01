@@ -1,0 +1,16 @@
+---
+
+    - name: set node as consul client(agent)
+      template: src=client.j2.json dest=/etc/consul.d/consul_agent/config.json
+        owner=consul group=consul mode=0664
+
+    - name: config upstart script
+      template: src=startup.j2.conf dest=/etc/init/consul.conf
+
+    - name: download web ui
+      become_user: consul
+      get_url: url="https://releases.hashicorp.com/consul/0.5.2/consul_0.5.2_web_ui.zip"
+        dest=/home/consul mode=0754
+
+    - name: unzip web ui
+      shell: "unzip /home/consul/consul_0.5.2_web_ui.zip"

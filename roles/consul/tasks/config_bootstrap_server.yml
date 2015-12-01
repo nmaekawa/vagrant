@@ -1,0 +1,7 @@
+---
+
+    - name: set server as boostrap
+      template: src=bootstrap.j2.json dest=/etc/consul.d/bootstrap/config.json
+        owner=consul group=consul mode=0664
+      run_once: true
+

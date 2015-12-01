@@ -1,7 +1,7 @@
 ---
 
     - name: download consul executable
-      get_url: url="https://dl.bintray.com/mitchellh/consul/0.5.2_linux_amd64.zip"
+      get_url: url="https://releases.hashicorp.com/consul/0.5.2/consul_0.5.2_linux_amd64.zip"
         dest=/tmp/consul.zip mode=0754
 
     - name: unzip consul executable
@@ -12,10 +12,13 @@
 
     - name: create user 'consul'
       user: name='consul' uid=2124 group=consul
-        shell=/sbin/nologin createhome=no state=present
+        shell=/sbin/nologin state=present
 
     - name: cp consul executable to /usr/local/bin
-      copy: src=/tmp/consul dest=/usr/local/bin/consul
+      shell: "cp /tmp/consul /usr/local/bin/consul"
+
+    - name: change ownership and permissions in /usr/local/bin/consul
+      file: path=/usr/local/bin/consul state=file
         owner=consul group=consul mode=0754
 
     - name: removed consul executable from /tmp
@@ -25,9 +28,17 @@
       file: path=/etc/consul.d state=directory
         owner=consul group=consul mode=0754
 
-    - name: create /etc/consul.d subdirectories
-      become_user: consul
-      shell: "mkdir -p /etc/consul.d/{bootstrap,server,client}"
+    - name: create /etc/consul.d/bootstrap directory
+      file: path=/etc/consul.d/bootstrap state=directory
+          owner=consul group=consul mode=0755
+
+    - name: create /etc/consul.d/consul_server directory
+      file: path=/etc/consul.d/consul_server state=directory
+          owner=consul group=consul mode=0755
+
+    - name: create /etc/consul.d/consul_agent directory
+      file: path=/etc/consul.d/consul_agent state=directory
+          owner=consul group=consul mode=0755
 
     - name: create consul data dir
       file: path=/var/consul state=directory

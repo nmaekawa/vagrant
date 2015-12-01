@@ -1,0 +1,12 @@
+---
+
+    - include: install.yml
+
+    - include: config_bootstrap_server.yml
+      when: inventory_hostname == "server1"
+
+    - include: config_agent.yml
+      when: consul_role == "consul_agent"
+
+    - include: config_cluster_server.yml
+      when: consul_role == "consul_server"

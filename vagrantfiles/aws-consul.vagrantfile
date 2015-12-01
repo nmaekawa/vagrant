@@ -4,14 +4,29 @@
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
 VAGRANTFILE_API_VERSION = "2"
 
+consul = {
+    'n_servers_in_cluster' => 3,
+    'datacenter_name' => 'naomi-datacenter3',
+
+    'aws_key_pair' => 'naomi-kp1',
+    'aws_key_pair_path' => '~/.ssh/naomi-kp1.pem',
+    'aws_tag_ENV' => 'DEV',
+    'aws_tag_Unit' => 'DE',
+    'aws_tag_Project' => 'MH',
+    'aws_tag_Owner' => 'nmaekawa'
+}
+
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+    config.vm.box = "aws-dummy"
 
     config.vm.provider 'aws' do |v, override|
         v.access_key_id = ENV['AWS_ACCESS_KEY']
         v.secret_access_key = ENV['AWS_SECRET_KEY']
-        v.keypair_name = 'naomi-kp1'
+        v.keypair_name = consul['aws_key_pair']
 
-        v.ami = 'ami-60b6c60a'
+        #v.ami = 'ami-60b6c60a' # amzlinux
+        v.ami = 'ami-d05e75b8'
         v.availability_zone = 'us-east-1b'
         v.region = 'us-east-1'
         v.instance_type = 't2.micro'
@@ -19,48 +34,84 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         v.associate_public_ip = true
         v.security_groups = [ 'sg-25601041' ]
         v.block_device_mapping = [{ 'DeviceName' => '/dev/xvda', 'Ebs.VolumeSize' => 10 }]
-
         v.user_data = File.read("scripts/user-data.sh")
 
-        override.ssh.username = 'ec2-user'
-        override.ssh.private_key_path = '~/.ssh/naomi-kp1.pem'
+        override.ssh.username = 'ubuntu'
+        override.ssh.private_key_path = consul['aws_key_pair_path']
     end
 
-    (1..3).each do |i|
+    (1..consul['n_servers_in_cluster']).each do |i|
         config.vm.define "server#{i}" do |server|
-            server.vm.box = "aws-dummy"
+            role = 'consul_server'
             server.vm.hostname = "server#{i}"
 
             server.vm.provider 'aws' do |v|
                 v.tags = {
                     'Name' => server.vm.hostname,
-                    'ENV' => 'DEV',
-                    'Unit' => 'DE',
-                    'Project' => 'MH',
-                    'Owner' => 'nmaekawa',
-                    'Role' => 'consul_server',
-                    'ClusteID' => 'naomi-datacenter2'
+                    'ENV' => consul['aws_tag_ENV'],
+                    'Unit' => consul['aws_tag_Unit'],
+                    'Project' => consul['aws_tag_Project'],
+                    'Owner' => consul['aws_tag_Owner'],
+                    'Role' => role,
+                    'ClusterID' => consul['datacenter_name']
                 }
-           end
+            end
+
+            config.vm.provision "ansible" do |ansible|
+                ansible.tags = "setup"
+                ansible.playbook = 'playbooks/aws-consul-cluster.yml'
+                ansible.groups = {
+                    "servers" => ['server1', 'server2', 'server3'],
+                    "agents" => ['agent1']
+                }
+                ansible.extra_vars = {
+                    consul_role: role,
+                    consul_datacenter_name: consul['datacenter_name'],
+                    consul_log_level: 'DEBUG',
+                    consul_encrypt_key: ENV['CONSUL_ENCRYPT_KEY'],
+                    n_servers_in_cluster: consul['n_servers_in_cluster'],
+                }
+            end
         end
     end
 
     (1..1).each do |i|
         config.vm.define "agent#{i}" do |server|
-            server.vm.box = "aws-dummy"
+            role = 'consul_agent'
             server.vm.hostname = "agent#{i}"
 
             server.vm.provider 'aws' do |v|
                 v.tags = {
                     'Name' => server.vm.hostname,
-                    'ENV' => 'DEV',
-                    'Unit' => 'DE',
-                    'Project' => 'MH',
-                    'Owner' => 'nmaekawa',
-                    'Role' => 'consul_agent',
-                    'ClusteID' => 'naomi-datacenter2'
+                    'ENV' => consul['aws_tag_ENV'],
+                    'Unit' => consul['aws_tag_Unit'],
+                    'Project' => consul['aws_tag_Project'],
+                    'Owner' => consul['aws_tag_Owner'],
+                    'Role' => role,
+                    'ClusterID' => consul['datacenter_name']
                 }
-           end
+            end
+
+            config.vm.provision "ansible" do |ansible|
+                ansible.tags = "setup"
+                ansible.playbook = 'playbooks/aws-consul-cluster.yml'
+                ansible.groups = {
+                    "servers" => ['server1', 'server2', 'server3'],
+                    "agents" => ['agent1']
+                }
+                ansible.extra_vars = {
+                    consul_role: role,
+                    consul_datacenter_name: consul['datacenter_name'],
+                    consul_log_level: 'DEBUG',
+                    consul_encrypt_key: ENV['CONSUL_ENCRYPT_KEY'],
+                    n_servers_in_cluster: consul['n_servers_in_cluster'],
+                }
+            end
         end
     end
 end
+
+
+
+
+
