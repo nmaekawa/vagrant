@@ -6,3 +6,4 @@
 
     - name: config upstart script
       template: src=startup.j2.conf dest=/etc/init/consul.conf
+

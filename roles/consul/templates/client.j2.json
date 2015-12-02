@@ -3,11 +3,11 @@
     "server": false,
     "datacenter": "{{ consul_datacenter_name }}",
     "data_dir": "/var/consul",
-    "encrypt": "{{ consul_encrypt_key }}",
+    "encrypt": "{{ lookup('env', 'CONSUL_ENCRYPT_KEY') }}",
     "log_level": "{{ consul_log_level }}",
     "enable_syslog": true,
     "start_join": [ {% for s in groups['servers'] %}
-        '{{ hostvars[s]['ansible_eth0']['ipv4']['address'] }}'{% if not loop.last %}, {% endif %}
+        "{{ hostvars[s]['ansible_default_ipv4']['address'] }}"{% if not loop.last %}, {% endif %}
         {% endfor %}
     ]
 }

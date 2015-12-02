@@ -13,4 +13,5 @@
         dest=/home/consul mode=0754
 
     - name: unzip web ui
-      shell: "unzip /home/consul/consul_0.5.2_web_ui.zip"
+      become_user: consul
+      shell: "unzip /home/consul/consul_0.5.2_web_ui.zip -d /home/consul"

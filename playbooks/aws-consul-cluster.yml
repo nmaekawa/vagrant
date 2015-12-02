@@ -4,30 +4,6 @@
 - hosts: all
   remote_user: "{{ r_user | default('ubuntu') }}"
   become: yes
-  vars:
-    devo_username: "nmaekawa"
-    devo_userid: 2132
 
   roles:
-    - role: box-setup
-      tags:
-        - setup
-
-    - role: user-management
-      set_env_for_username: True
-      username: "{{ devo_username }}"
-      userid: "{{ devo_userid }}"
-      tags:
-        - setup
-
-    - role: python
-      python_user: "{{ devo_username }}"
-      tags:
-        - setup
-
-    - role: ansible
-      python_user: "{{ devo_username }}"
-      tags:
-        - setup
-
     - role: consul

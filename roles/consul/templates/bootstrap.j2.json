@@ -3,7 +3,7 @@
     "server": true,
     "datacenter": "{{ consul_datacenter_name }}",
     "data_dir": "/var/consul",
-    "encrypt": "{{ consul_encrypt_key }}",
+    "encrypt": "{{ lookup('env', 'CONSUL_ENCRYPT_KEY') }}",
     "log_level": "{{ consul_log_level }}",
     "enable_syslog": true
 }

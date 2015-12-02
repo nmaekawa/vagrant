@@ -40,6 +40,21 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         override.ssh.private_key_path = consul['aws_key_pair_path']
     end
 
+    config.vm.provision "ansible" do |ansible|
+        ansible.tags = "setup"
+        ansible.playbook = 'playbooks/aws-consul-base-setup.yml'
+        ansible.groups = {
+            "servers" => ['server1', 'server2', 'server3'],
+            "agents" => ['agent1']
+        }
+        ansible.extra_vars = {
+            consul_datacenter_name: consul['datacenter_name'],
+            consul_log_level: 'DEBUG',
+            consul_encrypt_key: ENV['CONSUL_ENCRYPT_KEY'],
+            n_servers_in_cluster: consul['n_servers_in_cluster'],
+        }
+    end
+
     (1..consul['n_servers_in_cluster']).each do |i|
         config.vm.define "server#{i}" do |server|
             role = 'consul_server'
@@ -57,21 +72,20 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                 }
             end
 
-            config.vm.provision "ansible" do |ansible|
-                ansible.tags = "setup"
-                ansible.playbook = 'playbooks/aws-consul-cluster.yml'
-                ansible.groups = {
-                    "servers" => ['server1', 'server2', 'server3'],
-                    "agents" => ['agent1']
-                }
-                ansible.extra_vars = {
-                    consul_role: role,
-                    consul_datacenter_name: consul['datacenter_name'],
-                    consul_log_level: 'DEBUG',
-                    consul_encrypt_key: ENV['CONSUL_ENCRYPT_KEY'],
-                    n_servers_in_cluster: consul['n_servers_in_cluster'],
-                }
-            end
+            #config.vm.provision "ansible" do |ansible|
+            #    ansible.tags = "setup"
+            #    ansible.playbook = 'playbooks/aws-consul-cluster.yml'
+            #    ansible.groups = {
+            #        "servers" => ['server1', 'server2', 'server3'],
+            #        "agents" => ['agent1']
+            #    }
+            #    ansible.extra_vars = {
+            #        consul_role: role,
+            #        consul_datacenter_name: consul['datacenter_name'],
+            #        consul_log_level: 'DEBUG',
+            #        consul_encrypt_key: ENV['CONSUL_ENCRYPT_KEY'],
+            #    }
+            #end
         end
     end
 
@@ -92,21 +106,21 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                 }
             end
 
-            config.vm.provision "ansible" do |ansible|
-                ansible.tags = "setup"
-                ansible.playbook = 'playbooks/aws-consul-cluster.yml'
-                ansible.groups = {
-                    "servers" => ['server1', 'server2', 'server3'],
-                    "agents" => ['agent1']
-                }
-                ansible.extra_vars = {
-                    consul_role: role,
-                    consul_datacenter_name: consul['datacenter_name'],
-                    consul_log_level: 'DEBUG',
-                    consul_encrypt_key: ENV['CONSUL_ENCRYPT_KEY'],
-                    n_servers_in_cluster: consul['n_servers_in_cluster'],
-                }
-            end
+            #config.vm.provision "ansible" do |ansible|
+            #    ansible.tags = "setup"
+            #    ansible.playbook = 'playbooks/aws-consul-cluster.yml'
+            #    ansible.groups = {
+            #        "servers" => ['server1', 'server2', 'server3'],
+            #        "agents" => ['agent1']
+            #    }
+            #    ansible.extra_vars = {
+            #        consul_role: role,
+            #        consul_datacenter_name: consul['datacenter_name'],
+            #        consul_log_level: 'DEBUG',
+            #        consul_encrypt_key: ENV['CONSUL_ENCRYPT_KEY'],
+            #        n_servers_in_cluster: consul['n_servers_in_cluster'],
+            #    }
+            #end
         end
     end
 end
