@@ -29,8 +29,10 @@
     - name: give sudo powers to user
       lineinfile: "dest=/etc/sudoers state=present regexp='^{{ username }}'
         line='{{ username }}   ALL=(ALL)   NOPASSWD:   ALL' validate='visudo -cf %s'"
+      when: ( sudo_powers|bool )
 
     - name: copy ssh pub to authorized_keys
       authorized_key: user='{{ username }}' key='https://github.com/{{ username }}.keys'
+      ignore_errors: Yes
 
 

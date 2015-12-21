@@ -17,6 +17,7 @@
       set_env_for_username: True
       username: "{{ devo_username }}"
       userid: "{{ devo_userid }}"
+      sudo_powers: True
       tags:
         - setup
 

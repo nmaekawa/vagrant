@@ -14,6 +14,14 @@
       yum: name='git-all' state=present
       when: ansible_os_family == 'RedHat'
 
+    - name: ensure install python-dev
+      apt: name='python-dev' state=present
+      when: ansible_os_family == 'Debian'
+
+    - name: ensure install python-devel
+      yum: name='python-devel' state=present
+      when: ansible_os_family == 'RedHat'
+
     - name: ensure install pip
       apt: name='python-pip' state=present
       when: ansible_os_family == 'Debian'

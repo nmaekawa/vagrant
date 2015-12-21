@@ -7,6 +7,8 @@
   vars:
     devo_username: "nmaekawa"
     devo_userid: 2132
+    apache_run_username: "web"
+    apache_run_userid: 2133
 
   roles:
     - role: box-setup
@@ -17,17 +19,8 @@
       userid: "{{ devo_userid }}"
       sudo_powers: True
 
-    - role: python
-      python_user: "{{ devo_username }}"
-
-    - role: ansible
-      python_user: "{{ devo_username }}"
-
-    - role: robotframework
-      python_user: "{{ devo_username }}"
-
-    - role: znzj.rbenv
-      rbenv_ruby_version: 2.2.3
+    - role: webserver
+      app_domain: "webserver.org"
 
 
 

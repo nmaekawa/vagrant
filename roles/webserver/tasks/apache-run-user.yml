@@ -1,0 +1,8 @@
+---
+
+    - include: ../../user-management/tasks/set-user.yml
+      vars:
+        username: "{{ apache_run_username }}"
+        userid: "{{ apache_run_userid }}"
+        sudo_powers: False
+

@@ -1,0 +1,14 @@
+---
+
+    - fail: msg='install apache2 only supported for Debian os_family'
+      when: not ansible_os_family == 'Debian'
+
+    - include: dependencies.yml
+
+    - include: apache-run-user.yml
+
+    - include: doc-root.yml
+
+    - include: apache-vhost-config.yml
+
+    - include: enable-vhost.yml

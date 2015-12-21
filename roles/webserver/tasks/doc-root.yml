@@ -1,0 +1,19 @@
+---
+
+    - name: create dir structure for document root
+      file: path='/var/www/{{ app_domain | default( "basicserver.org" ) }}/public_html'
+        state=directory
+        owner='{{ apache_run_username }}'
+        group='{{ apache_run_username }}'
+        mode=0755
+
+    - name: grant permissions for apache_run_username
+      file: path='/var/www' state=directory mode=0755
+
+    - name: drop the default index.html
+      template: src=index.j2.html
+        dest='/var/www/{{ app_domain | default("basicserver.org") }}/public_html/index.html'
+        owner='{{ apache_run_username }}'
+        group='{{ apache_run_username }}'
+        mode=0644
+

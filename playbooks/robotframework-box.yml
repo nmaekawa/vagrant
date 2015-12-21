@@ -12,6 +12,7 @@
       set_env_for_username: True
       username: "nmaekawa"
       userid: 2123
+      sudo_powers: True
 
     - role: python
       python_user: "nmaekawa"

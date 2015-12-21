@@ -1,0 +1,6 @@
+---
+
+    - name: drop config for vhost
+      template: src=vhost.j2.conf
+        dest=/etc/apache2/sites-available/{{ app_domain | default('basicserver.org') }}.conf
+

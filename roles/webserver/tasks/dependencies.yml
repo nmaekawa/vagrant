@@ -1,0 +1,30 @@
+---
+
+    - name: ensure apache2 is installed
+      apt: name='apache2' state=present
+
+    - name: ensure apache2 utils is installed
+      apt: name='apache2-utils' state=present
+
+
+#
+# dependencies to install flask
+# via cookiecutter https://github.com/sloria/cookiecutter-flask.git
+#
+#    - name: ensure install libpq-dev
+#      apt: name='libpq-dev' state=present
+#      when: ansible_os_family == 'Debian'
+#
+#    - name: ensure install postgres devel lib/headers
+#      yum: name='postgresql94-devel' state=present
+#      when: ansible_os_family == 'RedHat'
+#
+#    - name: ensure install libffi-dev
+#      apt: name='libffi-dev' state=present
+#      when: ansible_os_family == 'Debian'
+#
+#    - name: ensure install libffi-devel
+#      yum: name='libffi-devel' state=present
+#      when: ansible_os_family == 'RedHat'
+#
+

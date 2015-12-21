@@ -9,10 +9,8 @@
       template: src="{{ username }}-install.sh.j2"
         dest="/tmp/{{ username }}-install.sh"
         mode=0700
-      when: set_env_for_username
 
     - name: run setup-env script
       become_user: "{{ username }}"
       shell: "/tmp/{{ username }}-install.sh"
-      when: set_env_for_username
 

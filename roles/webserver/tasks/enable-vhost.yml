@@ -1,0 +1,14 @@
+---
+
+    - name: enable ssl mod
+      command: 'a2enmod ssl'
+
+    - name: enable vhost
+      command: 'a2ensite {{ app_domain | default("basicserver.org") }}.conf'
+
+    - name: restart apache service
+      service: name='apache2' state=restarted
+
+
+
+

@@ -1,3 +1,5 @@
 ---
     - include: set-user.yml
+
     - include: set-user-env.yml
+      when: set_env_for_username
