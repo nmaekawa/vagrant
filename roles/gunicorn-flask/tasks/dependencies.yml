@@ -1,0 +1,25 @@
+---
+
+    - name: ensure python-dev is installed
+      apt: name='python-dev' state=present
+
+    - name: ensure python-virtualenv is installed
+      apt: name='python-virtualenv' state=present
+
+    - name: ensure python-pip is installed
+      apt: name='python-pip' state=present
+
+    - name: ensure apache is not running
+      shell: update-rc.d -f apache2 remove
+
+    - name: ensure nginx is installed
+      apt: name='nginx' state=present
+
+    - name: ensure git is installed
+      apt: name='git' state=present
+
+    - name: ensure supervisor is installed
+      apt: name='supervisor' state=present
+
+
+

@@ -1,0 +1,32 @@
+---
+
+
+- hosts: all
+  remote_user: "{{ r_user | default('vagrant') }}"
+  become: yes
+  vars:
+    devo_username: "nmaekawa"
+    devo_userid: 2132
+    web_username: "web"
+    web_userid: 2133
+
+  roles:
+    - role: box-setup
+
+    - role: user-management
+      set_env_for_username: True
+      username: "{{ devo_username }}"
+      userid: "{{ devo_userid }}"
+      sudo_powers: True
+
+    - role: user-management
+      set_env_for_username: True
+      username: "{{ web_username }}"
+      userid: "{{ web_userid }}"
+      sudo_powers: False
+
+    - role: gunicorn-flask
+      app_domain: "naomi.org"
+
+
+

@@ -1,0 +1,17 @@
+#!/bin/bash -ex
+
+# install homeshick
+if [[ ! -d ${HOME}/.homesick || ! -d ${HOME}/.homesick/repos/homeshick ]]; then
+    git clone git://github.com/andsens/homeshick.git ${HOME}/.homesick/repos/homeshick
+fi
+
+# clone dotfile
+if [ ! -d ${HOME}/.homesick/repos/dotfiles ]; then
+    ${HOME}/.homesick/repos/homeshick/bin/homeshick clone --batch nmaekawa/dotfiles
+fi
+
+# link it all to $HOME
+${HOME}/.homesick/repos/homeshick/bin/homeshick link --force
+
+
+
