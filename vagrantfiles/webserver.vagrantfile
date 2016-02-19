@@ -9,7 +9,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.define "webserver" do |webserver|
         webserver.vm.box = "ubuntu/trusty64"
         webserver.vm.network "private_network", ip: "192.168.55.10"
-        webserver.vm.hostname = "naomi"
+        webserver.vm.hostname = "webserver"
 
         webserver.vm.provision "ansible" do |ansible|
             ansible.playbook = 'playbooks/gunicorn-flask-appserver.yml'

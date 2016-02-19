@@ -21,5 +21,14 @@
     - name: ensure supervisor is installed
       apt: name='supervisor' state=present
 
+    - name: ensure libpq-dev is installed (postgres)
+      apt: name='libpq-dev' state=present
 
+    - name: ensure libffi-dev is installed (bcrypt)
+      apt: name='libffi-dev' state=present
 
+    - name: ensure java7 is installed (ldap test server)
+      apt: name='{{ item }}' state=present
+      with_items:
+        - openjdk-7-jdk
+        - openjdk-7-jre
