@@ -1,0 +1,11 @@
+---
+
+    - name: ensure memcached is installed
+      apt: name='memcached' state='present'
+
+    - name: change memcache port
+      lineinfile: dest='/etc/memcached.conf'
+        regexp='-p 11211' line='-p {{ memcached_port | default('8008') }}'
+
+    - name: restart memcache service
+      service: name='memcached' state='restarted'

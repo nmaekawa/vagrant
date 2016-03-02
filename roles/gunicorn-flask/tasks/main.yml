@@ -1,3 +1,11 @@
 ---
     - include: dependencies.yml
+    - include: config-memcached.yml
+    - include: install-webapp.yml
+    - include: config-gunicorn.yml
+    - include: config-nginx-webapp-site.yml
+    - include: config-supervisor.yml
 
+# logrotate
+# loggly
+# protect memcached?

@@ -1,0 +1,32 @@
+---
+
+    - name: ensure sites subdir in webuser home
+      file: dest='/home/{{ web_username }}/sites'
+        owner='{{ web_username }}' group='{{ web_username }}'
+        state='directory'
+
+    - name: clone webapp repo
+      git: repo='{{ webapp_git_repo }}'
+        dest='/home/{{ web_username }}/sites/{{ webapp_name }}'
+        version='{{ webapp_git_version }}'
+        force=yes
+
+    - name: create virtualenv for webapp
+      shell: 'virtualenv venv'
+      args:
+        chdir: '/home/{{ web_username }}/sites/{{ webapp_name }}'
+
+    - name: install pip dependencies
+      pip: chdir='/home/{{ web_username }}/sites/{{ webapp_name }}'
+        requirements='requirements.txt'
+        virtualenv='venv'
+        state='present'
+
+    - name: chown webapp
+      shell: 'chown -R {{ web_username }}:{{ web_username }} /home/{{ web_username }}/sites/{{ webapp_name }}'
+
+    - name: config environment vars
+      template: src='{{ webapp_name }}.env.j2'
+        dest='/home/{{ web_username }}/sites/{{ webapp_name }}/{{ webapp_name }}.env'
+        owner='{{ web_username }}' group='{{ web_username }}' mode=0644
+

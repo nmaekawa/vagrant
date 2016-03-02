@@ -1,0 +1,35 @@
+#!/bin/bash
+# from http://prakhar.me/articles/flask-on-nginx-and-gunicorn/
+
+NAME="{{ webapp_name }}"
+FLASKDIR="/home/{{ web_username }}/sites/${NAME}"
+VENVDIR="${FLASKDIR}/venv"
+SOCKFILE="/home/{{ web_username }}/sock/${NAME}.sock"
+USER="{{ web_username }}"
+GROUP="{{ web_username }}"
+NUM_WORKERS=3
+
+echo "starting ${NAME}"
+
+# activate virtualenv
+cd ${VENVDIR}
+source bin/activate
+
+export PYTHONPATH=${FLASKDIR}:${PYTHONPATH}
+
+# export all env vars for app
+source ${FLASKDIR}/${NAME}.env
+
+# create the run directory if it doesn't exist
+RUNDIR=$(dirname $SOCKFILE)
+test -d ${RUNDIR} || mkdir -p ${RUNDIR}
+
+# start gunicorn
+exec gunicorn ${NAME}.app:create_app\(\) \
+    --name ${NAME} \
+    --workers ${NUM_WORKERS} \
+    --user=${USER} --group=${GROUP} \
+    --log-level=debug \
+    --log-file=- \
+    --bind=unix:${SOCKFILE}
+

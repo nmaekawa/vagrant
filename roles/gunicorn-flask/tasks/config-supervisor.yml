@@ -1,0 +1,13 @@
+---
+
+    - name: ensure supervisor is present
+      apt: name='supervisor' state='present'
+
+    - name: config webapp in supervisor
+      template: src='webapp_supervisor.conf.j2'
+        dest='/etc/supervisor/conf.d/{{ webapp_name }}.conf'
+        owner='root' group='root' mode=0644
+
+    - name: supervisor update and restart webapp
+      shell: 'supervisorctl reread && supervisorctl update && supervisorctl start {{ webapp_name }}'
+

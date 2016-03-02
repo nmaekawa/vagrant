@@ -1,0 +1,18 @@
+---
+
+    - name: ensure gunicorn is installed
+      become_user: '{{ web_username }}'
+      pip: chdir='/home/{{ web_username }}/sites/{{ webapp_name }}'
+        name='gunicorn'
+        virtualenv='venv'
+        virtualenv_command='/usr/local/bin/virtualenv'
+        state='present'
+
+    - name: set start script
+      template: src='gunicorn_start_script.sh.j2'
+        dest='/home/{{ web_username }}/sites/{{ webapp_name }}/gunicorn_start.sh'
+        owner='{{ web_username }}' group='{{ web_username }}' mode=0755
+
+    - name: create sock dir
+      file: dest='/home/{{ web_username }}/sock' state='directory'
+        owner='{{ web_username }}' group='{{ web_username }}' mode=0755

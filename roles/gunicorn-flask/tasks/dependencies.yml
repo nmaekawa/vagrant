@@ -10,6 +10,9 @@
       apt: name='python-pip' state=present
 
     - name: ensure apache is not running
+      service: name='apache2' state='stopped'
+
+    - name: ensure apache is not started at boot time
       shell: update-rc.d -f apache2 remove
 
     - name: ensure nginx is installed
@@ -26,9 +29,3 @@
 
     - name: ensure libffi-dev is installed (bcrypt)
       apt: name='libffi-dev' state=present
-
-    - name: ensure java7 is installed (ldap test server)
-      apt: name='{{ item }}' state=present
-      with_items:
-        - openjdk-7-jdk
-        - openjdk-7-jre

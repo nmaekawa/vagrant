@@ -7,8 +7,20 @@
   vars:
     devo_username: "nmaekawa"
     devo_userid: 2132
-    web_username: "web"
+    web_username: "webuser"
     web_userid: 2133
+    webapp_name: "appname"
+    webapp_git_repo: "https://github.com/nmaekawa/appname.git"
+    webapp_git_version: "branchB"
+    ca_stats_user: "user"
+    ca_stats_passwd: "password"
+    ca_stats_json_url: "http://ca-stats.json.url.com/data.json"
+    epipearl_user: "user"
+    epipearl_passwd: "password"
+    ldap_host: "ldap.host.com"
+    ldap_base_search: "dc=ldap,dc=host,dc=com"
+    ldap_bind_dn: "cn=user,dc=ldap,dc=host,dc=com"
+    ldap_bind_passwd: "password"
 
   roles:
     - role: box-setup

@@ -1,0 +1,37 @@
+---
+
+    - name: ensure nginx is present
+      apt: name='nginx' state='present'
+
+    - name: config webapp site
+      template: src='nginx_webapp.conf.j2'
+        dest='/etc/nginx/sites-available/{{ webapp_name }}'
+        owner='root' group='root' mode=0644
+
+    - name: create webapp nginx log dir
+      file: dest='/home/{{ web_username }}/logs' state='directory'
+        owner='{{ web_username }}' group='{{ web_username }}'
+        mode=0644
+
+    - name: create ssl certificates dir
+      file: dest='/etc/nginx/ssl' state='directory'
+        owner='root' group='root' mode=0600
+
+    - name: copy ssl certificate to nginx dir
+      copy: src='../files/certificate.cert' dest='/etc/nginx/ssl/certificate.cert'
+        owner='root' group='root' mode=0600
+
+    - name: copy ssl certificate KEY to nginx dir
+      copy: src='../files/certificate.key' dest='/etc/nginx/ssl/certificate.key'
+        owner='root' group='root' mode=0600
+
+    - name: remove default nginx site
+      file: dest=/etc/nginx/sites-enabled/default state='absent'
+
+    - name: link webapp site to sites-enabled dir
+      file: src='/etc/nginx/sites-available/{{ webapp_name }}'
+        dest='/etc/nginx/sites-enabled/{{ webapp_name }}'
+        state='link'
+
+    - name: restart nginx service
+      service: name='nginx' state='restarted'

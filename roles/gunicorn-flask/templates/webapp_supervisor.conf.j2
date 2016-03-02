@@ -1,0 +1,7 @@
+[program:{{ webapp_name }}]
+command = /home/{{ web_username }}/sites/{{ webapp_name }}/gunicorn_start.sh
+directory = /home/{{ web_username }}/sites/{{ webapp_name }}
+user = {{ web_username }}
+stdout_logfile = /home/{{ web_username }}/logs/{{ webapp_name }}_gunicorn_stdout.log
+stderr_logfile = /home/{{ web_username }}/logs/{{ webapp_name }}_gunicorn_stderr.log
+redirect_stderr = True
